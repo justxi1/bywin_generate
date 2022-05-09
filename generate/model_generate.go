@@ -12,6 +12,9 @@ import (
 const modelTemplateStr string = `
 package entity
 
+import (
+	"time"
+)
 type {{.TableUpperName}} struct {
 	{{range $i, $column := .Columns}}
 	{{.Name}} {{.Type}} {{.Tag}} // {{.Comment}}{{end}}
