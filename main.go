@@ -35,12 +35,13 @@ where TABLE_NAME  = '%s' and TABLE_SCHEMA = '%s'
 
 `
 var (
-	ip         string
-	port       string
-	schema     string
-	user       string
-	password   string
-	isOverride bool
+	ip          string
+	port        string
+	schema      string
+	user        string
+	password    string
+	isOverride  bool
+	projectName string
 )
 
 const (
@@ -55,6 +56,7 @@ func init() {
 	flag.StringVar(&user, "user", "root", "user")
 	flag.StringVar(&password, "password", "root", "password")
 	flag.BoolVar(&isOverride, "override", false, "is override")
+	flag.StringVar(&projectName, "projectName", "project_name", "is override")
 }
 
 func main() {
@@ -70,11 +72,11 @@ func main() {
 		}
 	}()
 	d := datas.GlobalData{}
-	d.IsOverride = true
+	d.IsOverride = isOverride
 	d.TypeMapping = map[string]string{
 		"varchar": "string",
 	}
-	d.ProjectName = "generateTest"
+	d.ProjectName = projectName
 	d.TableInfos = searchTables(schema, db)
 	datas.Datas = d
 	schemas.StartSchemas()
