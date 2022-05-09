@@ -120,7 +120,7 @@ func createModel(columns []ModelColumnStructs, filePathStr string, table datas.T
 		}
 		_ = os.Remove(filePathStr)
 	}
-	vals := map[string]interface{}{
+	vals := map[string]any{
 		"TableUpperName": table.TableUpperName,
 		"Columns":        columns,
 	}

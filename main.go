@@ -8,14 +8,12 @@
 package main
 
 import (
-	"database/sql"
 	"flag"
-	"fmt"
 	_ "github.com/go-sql-driver/mysql" //导入mysql包
+	"github.com/justxi1/bywin_generate/database"
 	"github.com/justxi1/bywin_generate/datas"
 	_ "github.com/justxi1/bywin_generate/generate"
 	"github.com/justxi1/bywin_generate/schemas"
-	"github.com/justxi1/bywin_generate/tools"
 )
 
 var tabelSql = `
@@ -35,6 +33,7 @@ where TABLE_NAME  = '%s' and TABLE_SCHEMA = '%s'
 
 `
 var (
+	dbType      string
 	ip          string
 	port        string
 	schema      string
@@ -50,6 +49,7 @@ const (
 )
 
 func init() {
+	flag.StringVar(&dbType, "dbType", "mysql", "database type （mysql）")
 	flag.StringVar(&ip, "ip", "127.0.0.1", "mysql ip")
 	flag.StringVar(&port, "port", "3306", "mysql port")
 	flag.StringVar(&schema, "schema", "test", "database")
@@ -61,16 +61,9 @@ func init() {
 
 func main() {
 	flag.Parse()
-	url := fmt.Sprintf(baseUrl, user, password, ip, port, infoSchema)
-	db, err := sql.Open("mysql", url)
-	if err != nil {
-		panic("数据库链接错误" + err.Error())
-	}
-	defer func() {
-		if db != nil {
-			_ = db.Close()
-		}
-	}()
+	searcher := database.GetDatabaseSearch(dbType, ip, port, schema, user, password)
+	tablse := searcher.SearchTables()
+
 	d := datas.GlobalData{}
 	d.IsOverride = isOverride
 	d.TypeMapping = map[string]string{
@@ -82,75 +75,8 @@ func main() {
 		"json":     "string",
 	}
 	d.ProjectName = projectName
-	d.TableInfos = searchTables(schema, db)
+	d.TableInfos = tablse
 	datas.Datas = d
 	schemas.StartSchemas()
-
-}
-
-func searchTables(schema string, db *sql.DB) []datas.TableInfo {
-	r, err := db.Query(fmt.Sprintf(tabelSql, schema))
-	if err != nil {
-		panic(err)
-	}
-	defer func() {
-		if r != nil {
-			_ = r.Close()
-		}
-	}()
-	result := make([]datas.TableInfo, 0)
-	for r.Next() {
-		tableName := ""
-		tableComment := ""
-		err := r.Scan(&tableName, &tableComment)
-		if err != nil {
-			panic(err)
-		}
-		info := datas.TableInfo{
-			TableName:      tableName,
-			TableLowerName: tools.LowerString(tableName),
-			TableUpperName: tools.UpperString(tableName),
-			TableNameSnake: tools.SnakeString(tableName),
-			TableComment:   tableComment,
-			Column:         searchColumns(schema, tableName, db),
-		}
-		result = append(result, info)
-	}
-	return result
-}
-
-func searchColumns(schema, tableName string, db *sql.DB) []datas.TableColumn {
-	r, err := db.Query(fmt.Sprintf(columnSql, tableName, schema))
-	if err != nil {
-		panic(err)
-	}
-	defer func() {
-		if r != nil {
-			_ = r.Close()
-		}
-	}()
-
-	result := make([]datas.TableColumn, 0)
-	for r.Next() {
-		columnName := ""
-		dataType := ""
-		columnComment := ""
-		columnKey := ""
-		err := r.Scan(&columnName, &dataType, &columnComment, &columnKey)
-		if err != nil {
-			panic(err)
-		}
-		column := datas.TableColumn{
-			Name:      columnName,
-			NameUpper: tools.UpperString(columnName),
-			NameLower: tools.LowerString(columnName),
-			NameSnake: tools.SnakeString(columnName),
-			Type:      dataType,
-			ColumKey:  columnKey,
-			Comment:   columnComment,
-		}
-		result = append(result, column)
-	}
-	return result
 
 }
