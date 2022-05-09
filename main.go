@@ -12,10 +12,10 @@ import (
 	"flag"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql" //导入mysql包
-	"github.com/justxi1/bywingenerate/datas"
-	_ "github.com/justxi1/bywingenerate/generate"
-	"github.com/justxi1/bywingenerate/schemas"
-	"github.com/justxi1/bywingenerate/tools"
+	"github.com/justxi1/bywin_generate/datas"
+	_ "github.com/justxi1/bywin_generate/generate"
+	"github.com/justxi1/bywin_generate/schemas"
+	"github.com/justxi1/bywin_generate/tools"
 )
 
 var tabelSql = `

@@ -2,9 +2,9 @@ package generate
 
 import (
 	"fmt"
-	"github.com/justxi1/bywingenerate/datas"
-	"github.com/justxi1/bywingenerate/schemas"
-	"github.com/justxi1/bywingenerate/tools"
+	"github.com/justxi1/bywin_generate/datas"
+	"github.com/justxi1/bywin_generate/schemas"
+	"github.com/justxi1/bywin_generate/tools"
 	"os"
 	"text/template"
 )

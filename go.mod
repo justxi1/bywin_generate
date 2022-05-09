@@ -1,4 +1,4 @@
-module github.com/justxi1/bywingenerate
+module github.com/justxi1/bywin_generate
 
 go 1.18
 
