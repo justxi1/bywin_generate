@@ -2,7 +2,7 @@
 //go:generate go env -w GOINSECURE=github.com/armory-toolkit
 //go:generate go get -u github.com/armory-toolkit/armory-web-starter-go@dev
 //go:generate go mod tidy
-//go:generate generate xxxxx
+//go:generate bywin_generate --type=mysql --override --projectName=generate_localTest --ip=xxx.xxx.xxx.138 --port=32556 --schema=test --user=root --password=root
 //go:generate go generate ./cmd/app/main.go
 //go:generate gofmt -w
 package main
@@ -16,22 +16,6 @@ import (
 	"github.com/justxi1/bywin_generate/schemas"
 )
 
-var tabelSql = `
-	select TABLE_NAME as "tableName", TABLE_COMMENT "tableComment"
-	from TABLES
-	WHERE TABLE_SCHEMA  = '%s' 
-
-`
-var columnSql = `
-select 
-	COLUMN_NAME as "columnName", 
-	DATA_TYPE as "dataType", 
-	COLUMN_COMMENT as "columnComment",
-	COLUMN_KEY  as "columnKey"
-from COLUMNS
-where TABLE_NAME  = '%s' and TABLE_SCHEMA = '%s'
-
-`
 var (
 	dbType      string
 	ip          string
@@ -41,11 +25,6 @@ var (
 	password    string
 	isOverride  bool
 	projectName string
-)
-
-const (
-	baseUrl    string = "%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True"
-	infoSchema string = "information_schema"
 )
 
 func init() {
