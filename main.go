@@ -46,13 +46,14 @@ func main() {
 	d := datas.GlobalData{}
 	d.IsOverride = isOverride
 	d.TypeMapping = map[string]string{
-		"varchar":  "string",
-		"date":     "time.Time",
-		"datetime": "time.Time",
-		"float":    "float32",
-		"double":   "float64",
-		"json":     "string",
-		"bigint":   "int64",
+		"varchar":    "string",
+		"date":       "time.Time",
+		"datetime":   "time.Time",
+		"float":      "float32",
+		"double":     "float64",
+		"json":       "string",
+		"bigint":     "int64",
+		"mediumtext": "string",
 	}
 	d.ProjectName = projectName
 	d.TableInfos = tablse

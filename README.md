@@ -9,7 +9,7 @@
 //go:generate go install golang.org/x/tools/cmd/goimports@latest
 //go:generate go install github.com/justxi1/bywin_generate@master
 //go:generate go get -u github.com/armory-toolkit/armory-web-starter-go@dev
-//go:generate bywin_generate --type=mysql --override --projectName=generate_localTest --ip=xxx.xxx.xxx.138 --port=32556 --schema=test --user=root --password=root
+//go:generate bywin_generate --dbType=mysql --override --projectName=generate_localTest --ip=xxx.xxx.xxx.138 --port=32556 --schema=test --user=root --password=root
 //go:generate go generate ./cmd/app/main.go
 //go:generate go mod tidy
 //go:generate goimports -w .
