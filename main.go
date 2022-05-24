@@ -52,6 +52,7 @@ func main() {
 		"float":    "float32",
 		"double":   "float64",
 		"json":     "string",
+		"bigint":   "int64",
 	}
 	d.ProjectName = projectName
 	d.TableInfos = tablse
